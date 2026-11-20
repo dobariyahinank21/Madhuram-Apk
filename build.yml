@@ -1,0 +1,130 @@
+name: Build APK
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Android project banao
+        env:
+          LOGO: "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"
+        run: |
+          mkdir -p app/src/main/java/com/madhuram/busbooking app/src/main/assets
+          cp index.html app/src/main/assets/index.html
+          for d in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            mkdir -p app/src/main/res/mipmap-$d
+            echo "$LOGO" | base64 -d > app/src/main/res/mipmap-$d/ic_launcher.png
+            cp app/src/main/res/mipmap-$d/ic_launcher.png app/src/main/res/mipmap-$d/ic_launcher_round.png
+          done
+          cat > settings.gradle <<'EOT'
+          pluginManagement {
+              repositories { google(); mavenCentral(); gradlePluginPortal() }
+          }
+          dependencyResolutionManagement {
+              repositories { google(); mavenCentral() }
+          }
+          rootProject.name = 'MadhuramBusBooking'
+          include ':app'
+          EOT
+          cat > build.gradle <<'EOT'
+          plugins {
+              id 'com.android.application' version '8.5.2' apply false
+          }
+          EOT
+          printf 'org.gradle.jvmargs=-Xmx2g\nandroid.useAndroidX=true\n' > gradle.properties
+          cat > app/build.gradle <<'EOT'
+          plugins {
+              id 'com.android.application'
+          }
+          android {
+              namespace 'com.madhuram.busbooking'
+              compileSdk 34
+              defaultConfig {
+                  applicationId "com.madhuram.busbooking"
+                  minSdk 21
+                  targetSdk 34
+                  versionCode 1
+                  versionName "1.0"
+              }
+              compileOptions {
+                  sourceCompatibility JavaVersion.VERSION_1_8
+                  targetCompatibility JavaVersion.VERSION_1_8
+              }
+          }
+          EOT
+          cat > app/src/main/AndroidManifest.xml <<'EOT'
+          <?xml version="1.0" encoding="utf-8"?>
+          <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+              <uses-permission android:name="android.permission.INTERNET" />
+              <application
+                  android:icon="@mipmap/ic_launcher"
+                  android:roundIcon="@mipmap/ic_launcher_round"
+                  android:label="Madhuram Bus Booking"
+                  android:theme="@android:style/Theme.Material.Light.NoActionBar">
+                  <activity
+                      android:name=".MainActivity"
+                      android:exported="true"
+                      android:configChanges="orientation|screenSize|keyboardHidden">
+                      <intent-filter>
+                          <action android:name="android.intent.action.MAIN" />
+                          <category android:name="android.intent.category.LAUNCHER" />
+                      </intent-filter>
+                  </activity>
+              </application>
+          </manifest>
+          EOT
+          cat > app/src/main/java/com/madhuram/busbooking/MainActivity.java <<'EOT'
+          package com.madhuram.busbooking;
+
+          import android.app.Activity;
+          import android.os.Bundle;
+          import android.webkit.WebSettings;
+          import android.webkit.WebView;
+          import android.webkit.WebViewClient;
+
+          public class MainActivity extends Activity {
+              private WebView webView;
+
+              @Override
+              protected void onCreate(Bundle savedInstanceState) {
+                  super.onCreate(savedInstanceState);
+                  webView = new WebView(this);
+                  setContentView(webView);
+                  WebSettings s = webView.getSettings();
+                  s.setJavaScriptEnabled(true);
+                  s.setDomStorageEnabled(true);
+                  webView.setWebViewClient(new WebViewClient());
+                  if (savedInstanceState != null) {
+                      webView.restoreState(savedInstanceState);
+                  } else {
+                      webView.loadUrl("file:///android_asset/index.html");
+                  }
+              }
+
+              @Override
+              protected void onSaveInstanceState(Bundle outState) {
+                  super.onSaveInstanceState(outState);
+                  webView.saveState(outState);
+              }
+
+              @Override
+              public void onBackPressed() {
+                  if (webView.canGoBack()) webView.goBack();
+                  else super.onBackPressed();
+              }
+          }
+          EOT
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 8.7
+      - run: gradle assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MadhuramBusBooking-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
