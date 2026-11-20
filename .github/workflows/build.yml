@@ -83,13 +83,30 @@ jobs:
           package com.madhuram.busbooking;
 
           import android.app.Activity;
+          import android.content.Intent;
+          import android.net.Uri;
           import android.os.Bundle;
+          import android.webkit.WebResourceRequest;
           import android.webkit.WebSettings;
           import android.webkit.WebView;
           import android.webkit.WebViewClient;
 
           public class MainActivity extends Activity {
               private WebView webView;
+
+              private boolean handleUrl(Uri uri) {
+                  String scheme = uri.getScheme();
+                  if (scheme == null || scheme.equals("file") || scheme.equals("about")
+                          || scheme.equals("data") || scheme.equals("javascript")) {
+                      return false;
+                  }
+                  try {
+                      startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                  } catch (Exception e) {
+                      // koi app nahi mili
+                  }
+                  return true;
+              }
 
               @Override
               protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +116,17 @@ jobs:
                   WebSettings s = webView.getSettings();
                   s.setJavaScriptEnabled(true);
                   s.setDomStorageEnabled(true);
-                  webView.setWebViewClient(new WebViewClient());
+                  webView.setWebViewClient(new WebViewClient() {
+                      @Override
+                      public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                          return handleUrl(request.getUrl());
+                      }
+
+                      @Override
+                      public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                          return handleUrl(Uri.parse(url));
+                      }
+                  });
                   if (savedInstanceState != null) {
                       webView.restoreState(savedInstanceState);
                   } else {
